@@ -25,7 +25,8 @@ def retry(f: Callable[[], Optional[T]], n_tries: int) -> Optional[T]:
 
 def get_auth(url: str) -> Optional[str]:
     """Get the auth token from a BADSEC server based at the given url.
-    Returns the token on success and None on failure.
+    Returns the token on success and None on failure. Will retry the
+    request up to a total of REQUEST_TRIES attempts.
     """
     def attempt() -> Optional[str]:
         logging.info("requesting auth token")

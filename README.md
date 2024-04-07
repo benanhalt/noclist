@@ -14,7 +14,7 @@ Python 3.11.
 ```
 python -m venv ve
 source ve/bin/activate
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 If the test BADSEC server is started as specified in the problem
