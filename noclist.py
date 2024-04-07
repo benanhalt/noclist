@@ -44,6 +44,9 @@ def checksum(token: str, path: str) -> str:
     path using the given auth token. Supports only ascii strings
     for the token and path.
     """
+    # Use str.encode('ascii') so that we'll get an exception here if
+    # the assumption is violated rather than a potentially confusing
+    # bad checksum error further down the line.
     return hashlib.sha256(f"{token}/{path}".encode('ascii')).hexdigest()
 
 def get_users(url: str, token: str) -> Optional[list[str]]:

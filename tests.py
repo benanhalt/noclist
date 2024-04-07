@@ -29,6 +29,10 @@ class TestChecksum(unittest.TestCase):
             "c20acb14a3d3339b9e92daebb173e41379f9f2fad4aa6a6326a696bd90c67419"
         )
 
+    def test_nonascii(self):
+        self.assertRaises(UnicodeEncodeError, lambda: noclist.checksum("😊", "users"))
+        self.assertRaises(UnicodeEncodeError, lambda: noclist.checksum("12345", "😊"))
+
 
 if __name__ == '__main__':
     unittest.main()
