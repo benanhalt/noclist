@@ -5,7 +5,7 @@ import optparse
 import requests
 from requests import RequestException
 import sys
-from typing import Callable, Optional, TypeVar
+from typing import Callable, Optional, TypeVar, Tuple
 
 REQUEST_TRIES = 3 # Number of times to attempt BADSEC requests.
 REQUEST_TIMEOUT = 5 # Timeout in secs for BADSEC requests.
@@ -73,23 +73,22 @@ def get_users(url: str, token: str) -> Optional[list[str]]:
 
     return retry(attempt, REQUEST_TRIES)
 
-def noclist(url: str) -> int:
+def noclist(url: str) -> Tuple[int, str]:
     """Retrieve the list of users from a BADSEC server based at the
-    given url and print the list to stdout as a JSON list. Returns
-    0 on success and 1 on failure.
+    given url. Returns the exit code (0 for success, 1 otherwise) and
+    the user id list as a JSON string.
     """
     token = get_auth(url)
     if token is None:
         logging.error("failed to get auth token")
-        return 1
+        return (1, "")
 
     users = get_users(url, token)
     if users is None:
         logging.error("failed to get user list")
-        return 1
+        return (1, "")
 
-    print(json.dumps(users))
-    return 0
+    return (0, json.dumps(users))
 
 if __name__ == "__main__":
     parser = optparse.OptionParser(usage="usage: %prog [options] BADSEC_SERVER_URL")
@@ -103,4 +102,6 @@ if __name__ == "__main__":
     loglevel = logging.DEBUG if options.verbose else logging.WARNING
     logging.basicConfig(stream=sys.stderr, level=loglevel)
 
-    exit(noclist(args[0]))
+    code, output = noclist(args[0])
+    print(output)
+    exit(code)

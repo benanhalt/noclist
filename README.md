@@ -39,6 +39,13 @@ Tests are implemented in `tests.py` and can be invoked as
 python tests.py
 ```
 
+If the test server is running, a basic integration test can be enabled
+by including the test server url as an environment variable.
+
+```
+NOCLIST_TEST_SERVER=http://localhost:8888 python tests.py 
+```
+
 The source code includes types which can be checked using `mypy`.
 
 ```
